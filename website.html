@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>the slow site // resisting speed</title>
+
+  <!-- Google Fonts: Press Start 2P for pixelated retro look -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, Helvetica, sans-serif; /* changed to Arial */
+    width: 700px;
+    margin: 80px auto;
+    line-height: 1.5;
+    text-align: left;
+}
+
+h1 {
+  font-family: Arial, Helvetica, sans-serif; /* changed to Arial */
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 2px;
+  opacity: 0;
+  transition: opacity 3s ease;
+  cursor: pointer;
+}
+
+    h1.visible { opacity: 1; }
+
+    #subtitle {
+      text-align: center;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 3s ease;
+    }
+
+    nav {
+      text-align: center;
+      margin: 30px 0;
+      opacity: 0;
+      transition: opacity 3s ease;
+      visibility: hidden;
+    }
+    nav.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    nav a {
+      color: #0033cc;
+      text-decoration: underline;
+      margin: 0 15px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    nav a:hover { color: purple; }
+
+    #message {
+      text-align:center;
+      font-size:12px;
+      color:#555;
+      min-height: 20px;
+    }
+
+    .section {
+      display: none;
+      opacity: 0;
+      transition: opacity 2s ease;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+    }
+    .section.visible {
+      display: block;
+      opacity: 1;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 10px;
+      margin-top: 60px;
+      color: #555;
+      opacity: 0;
+      transition: opacity 3s ease;
+    }
+    footer.visible { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <h1 id="title">the slow site</h1>
+  <p id="subtitle"><em>a digital pause — a resistance to speed</em></p>
+
+  <nav id="nav">
+    <a onclick="showSection('theory')">theory</a> |
+    <a onclick="showSection('personal')">personal</a> |
+    <a onclick="showSection('neurology')">neurology</a>
+  </nav>
+
+  <div id="message"></div>
+
+  <div id="theory" class="section">
+    <h2>Theoretical background</h2>
+    <p>Speed has become our dominant ideology. The faster the data, the more valuable the interaction.  
+    Yet attention, as a human capacity, cannot be accelerated indefinitely.</p>
+    <p>Byung-Chul Han writes of the "burnout society" — a collective exhaustion produced by endless self-optimization.  
+    This site refuses efficiency, embracing latency as resistance.</p>
+  </div>
+
+  <div id="personal" class="section">
+    <h2>Personal reflections</h2>
+    <p>I made this space as an act of defiance.  
+    A place without metrics, without performance.  
+    Here, slowness feels like a small act of care.</p>
+    <p>Each delay is intentional — each pause a moment to breathe.</p>
+  </div>
+
+  <div id="neurology" class="section">
+    <h2>Neurological background</h2>
+    <p>Our nervous systems are not optimized for constant input.  
+    Attention is rhythmic, not linear. It needs gaps — moments of rest — to integrate experience.</p>
+    <p>Slowness online can be seen as a neurological necessity rather than a nostalgic gesture.</p>
+  </div>
+
+  <footer id="footer">
+    <p>© 2025 — the slow site. all rights reserved (eventually).</p>
+  </footer>
+
+  <script>
+    const title = document.getElementById("title");
+    const subtitle = document.getElementById("subtitle");
+    const nav = document.getElementById("nav");
+    const footer = document.getElementById("footer");
+    const message = document.getElementById("message");
+    const sections = document.querySelectorAll(".section");
+
+    let currentSection = null;
+
+    // Initial page load
+    function initialLoad() {
+      // hide all sections
+      sections.forEach(sec => {
+        sec.style.display = "none";
+        sec.classList.remove("visible");
+      });
+      message.innerHTML = "";
+
+      // hide nav/footer/subtitle for fade-in
+      nav.classList.remove("visible");
+      nav.style.visibility = "hidden";
+      footer.classList.remove("visible");
+      subtitle.style.opacity = 0;
+
+      // fade in title
+      title.classList.add("visible");
+      setTimeout(() => { subtitle.style.opacity = 1; }, 3000);
+      setTimeout(() => {
+        nav.style.visibility = "visible";
+        nav.classList.add("visible");
+        footer.classList.add("visible");
+        message.innerHTML = "<p>select a section — but patience is required.</p>";
+      }, 6000);
+
+      currentSection = null;
+    }
+
+    document.addEventListener("DOMContentLoaded", initialLoad);
+
+    // Show sections with loading delay
+    function showSection(id) {
+      if (currentSection) {
+        currentSection.classList.remove("visible");
+        currentSection.style.display = "none";
+      }
+
+      message.innerHTML = "<em>please wait...</em>";
+
+      setTimeout(() => {
+        message.innerHTML = "";
+        const section = document.getElementById(id);
+        section.style.display = "block";
+        setTimeout(() => section.classList.add("visible"), 50);
+        currentSection = section;
+      }, 4000);
+    }
+
+    // Clicking the main header resets to initial menu
+    title.addEventListener("click", () => {
+      if (currentSection) {
+        currentSection.classList.remove("visible");
+        setTimeout(() => currentSection.style.display = "none", 500);
+      }
+      nav.classList.remove("visible");
+      footer.classList.remove("visible");
+      subtitle.style.opacity = 0;
+
+      setTimeout(initialLoad, 500);
+    });
+  </script>
+
+</body>
+</html>
